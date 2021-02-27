@@ -277,3 +277,4 @@ if casualties == True:
         print('cyclists/pedestrians died in ' + dead[i][1] + ': '+ dead[i][0])
         print('cyclists/pedestrians heavily injured in ' + h_injured[i][1] + ': '+ h_injured[i][0])
         print('cyclists/pedestrians lightly injured in ' + l_injured[i][1] + ': '+ l_injured[i][0])
+    
