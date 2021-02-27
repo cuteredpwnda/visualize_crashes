@@ -1,15 +1,16 @@
 # TODO List
 ## TODOs
-- [] dateinfo on popup
+- [x] dateinfo on popup
 - [] aggregate/cluster in urban disctrict 
     - [] find shapefiles
     - [] inside shape aggregation
 - [] timeslider
 - [] overall statistics
     ### 'UKATEGORIE'
-    - [] deaths
-    - [] heavily injured
-    - [] lightly injured
+    - [x] visualize
+        - [x] deaths
+        - [x] heavily injured
+        - [x] lightly injured
     ### 'UTYP1'
     - [] general stats
     ### other
