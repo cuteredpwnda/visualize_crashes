@@ -202,11 +202,12 @@ def add_markers(df, df_label, lat_name, lon_name, map, color):
     for idx, row in df.iterrows():
         popup = folium.Popup(row[df_label], max_width=450,min_width=100)
         circle_color = color_category(row)
+        markertype = icon_picture(row)
         folium.Marker(
                         location = [row[lat_name], row[lon_name]], 
                         popup=popup,
                         clustered_marker=True,
-                        icon=folium.Icon(color = color, icon_color= 'white', icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
+                        icon=folium.Icon(color = color, icon_color= 'white', icon = markertype, prefix='fa')).add_to(marker_cluster)
         folium.Circle(  location = [row[lat_name], row[lon_name]],
                         radius=5,
                         color= circle_color,
@@ -252,6 +253,7 @@ if debug == True:
     print(df_2019_nrw_dortmund_bike['UKATEGORIE'])
     print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
     print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
+    print( 'cyclist vs pedestrian: ' + str(df_2019_nrw_dortmund_bike.loc[(df_2019_nrw_dortmund_bike['IstFuss'] == 1)]))
 
 casualties = True
 if casualties == True:
@@ -279,3 +281,4 @@ if casualties == True:
         print('pedestrians died in ' + dead_pedestrian[i][1] + ': '+ dead_pedestrian[i][0])
         print('pedestrians heavily injured in ' + h_injured_pedestrian[i][1] + ': '+ h_injured_pedestrian[i][0])
         print('pedestrians lightly injured in ' + l_injured_pedestrian[i][1] + ': '+ l_injured_pedestrian[i][0])
+    
