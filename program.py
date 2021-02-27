@@ -205,23 +205,20 @@ def add_markers(df, df_label, lat_name, lon_name, map, iconcolor):
                         clustered_marker=True,
                         icon=folium.Icon(color = color_category(row), icon_color=iconcolor, icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
 
-
-
-
-def add_all_markers():
-    for i in range(len(df_list)):
+def add_all_markers(list):
+    for i in range(len(list)):
         tic = time.perf_counter()
-        add_markers(df_list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, df_list[i][1])
+        add_markers(list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, list[i][1])
         toc = time.perf_counter()
-        print(f'adding clustered markers of {df_list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
+        print(f'adding clustered markers of {list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
 
-add_all_markers()
+add_all_markers(df_list)
 
 #save map as html
 def save_map(name):
     tic = time.perf_counter()
     map.save(name+".html")
-    print('saved as ' + str(name))
+    print('saved as ' + str(name) +".html")
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
