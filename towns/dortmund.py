@@ -173,8 +173,9 @@ class YearColor:
     color2018 = 'beige'
     color2017 = 'purple'
     
-df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
-            #,(df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
+df_list = [#(df_2019_nrw_dortmund_bike, YearColor.color2019)
+            #,
+            (df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
             ]
 
 
@@ -201,7 +202,6 @@ def add_markers(df, df_label, lat_name, lon_name, map, color):
     for idx, row in df.iterrows():
         popup = folium.Popup(row[df_label], max_width=450,min_width=100)
         circle_color = color_category(row)
-        print(circle_color)
         folium.Marker(
                         location = [row[lat_name], row[lon_name]], 
                         popup=popup,
@@ -234,7 +234,7 @@ def save_map(name):
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
-save_map("bikecrashes")
+save_map("pedestriancrashes")
 #end time
 tic = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
@@ -252,4 +252,15 @@ if debug == True:
     print(df_2019_nrw_dortmund_bike['UKATEGORIE'])
     print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
     print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
-    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'] == 2])
+
+casualties = True
+if casualties == True:
+    #bike casualties
+    print('cyclists/pedestrians died: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]))
+    print('cyclists/pedestrians heavily injured: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]))
+    print('cyclists/pedestrians lightly injured: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]))
+
+    #pedestrian casualties
+    print('pedestrians died: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 1].shape[0]))
+    print('pedestrians heavily injured: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 2].shape[0]))
+    print('pedestrians lightly injured: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 3].shape[0]))
