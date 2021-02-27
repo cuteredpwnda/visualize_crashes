@@ -225,7 +225,7 @@ add_all_markers(df_list)
 #save map as html
 def save_map(name):
     tic = time.perf_counter()
-    map.save("../html\towns/wuerzburg" + name+".html")
+    map.save("../html/wuerzburg" + name+".html")
     print('saved as ' + str(name) +".html")
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
