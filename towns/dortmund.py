@@ -21,9 +21,9 @@ def read_input(location):
     df.name = filename
     return df
 
-df_2019 = read_input('data/Unfallorte2019_EPSG25832_CSV/csv/Unfallorte2019_LinRef.txt')
-df_2018 = read_input('data/Unfallorte2018_EPSG25832_CSV/csv/Unfallorte2018_LinRef.txt')
-df_2017 = read_input('data/Unfallorte2017_EPSG25832_CSV/csv/Unfallorte2017_LinRef.txt')
+df_2019 = read_input('../data/Unfallorte2019_EPSG25832_CSV/csv/Unfallorte2019_LinRef.txt')
+df_2018 = read_input('../data/Unfallorte2018_EPSG25832_CSV/csv/Unfallorte2018_LinRef.txt')
+df_2017 = read_input('../data/Unfallorte2017_EPSG25832_CSV/csv/Unfallorte2017_LinRef.txt')
 
 #reformat koordinates, replace , with .
 def replace_commas(df):
@@ -219,7 +219,7 @@ add_all_markers(df_list)
 #save map as html
 def save_map(name):
     tic = time.perf_counter()
-    map.save("html/towns/dortmund/" + name+".html")
+    map.save("../html/towns/dortmund/" + name+".html")
     print('saved as ' + str(name) +".html")
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
