@@ -10,6 +10,7 @@ import time
 
 #start timer
 start_time = time.perf_counter()
+
 #read the data
 def read_input(location):
     tic = time.perf_counter()
@@ -36,9 +37,43 @@ replace_commas(df_2019)
 replace_commas(df_2018)
 replace_commas(df_2017)
 
+# months and weekday dicts:
+monthdict = {
+    "Januar" : 1,
+    "Februar" : 2,
+    "März" : 3,
+    "April" : 4,
+    "Mai" : 5,
+    "Juni" : 6,
+    "Juli" : 7,
+    "August" : 8,
+    "September" : 9,
+    "Oktober" : 10,
+    "November" : 11,
+    "Dezember" : 12
+}
+
+weekdaydict = {
+    "Sonntag" : 1,
+    "Montag" : 2,
+    "Dienstag" : 3,
+    "Mittwoch" : 4,
+    "Donnerstag" : 5,
+    "Freitag" : 6,
+    "Samstag" : 7
+}
+
 # create a readable column for info
+#TODO fix conversions
 def create_infocolumn(df):
-    df['Info'] = 'Stunde: ' +  df['USTUNDE'].astype(str)+ ' Uhr' + '\n' +' Monat: ' +  df['UMONAT'].astype(str)  + '\n' +' Jahr: ' + df['UJAHR'].astype(str)
+    tic = time.perf_counter()
+    #print(df['UMONAT'])
+    #df_temp = df.replace({'UMONAT':monthdict})
+    #print(df_temp['UMONAT'])
+    df['Info'] = 'Stunde: ' +  df['USTUNDE'].astype(str)+ ' Uhr' +' Monat: ' +  df['UMONAT'].astype(str)  + ' Jahr: ' + df['UJAHR'].astype(str)
+    toc = time.perf_counter()
+    print(f'creating the infocolumn for {df.name} took {toc-tic:0.4f} seconds.')
+
 
 create_infocolumn(df_2019)
 create_infocolumn(df_2018)
@@ -47,23 +82,25 @@ create_infocolumn(df_2017)
 # print(df_2019['Info'])
 
 #filter for state
-class State():
-    SchleswigHolstein = 1
-    Hamburg = 2
-    Niedersachsen = 3
-    Bremen = 4
-    NordrheinWestfalen = 5
-    Hessen = 6
-    RheinlandPfalz = 7
-    BadenWürttemberg = 8
-    Bayern = 9
-    Saarland = 10
-    Berlin = 11
-    Brandenburg = 12
-    MecklenburgVorpommern = 13
-    Sachsen = 14
-    SachsenAnhalt = 15
-    Thüringen = 16
+statedict = {
+    "SchleswigHolstein" : 1,
+    "Hamburg" : 2,
+    "Niedersachsen" : 3,
+    "Bremen" : 4,
+    "NordrheinWestfalen" : 5,
+    "Hessen" : 6,
+    "RheinlandPfalz" : 7,
+    "BadenWürttemberg" : 8,
+    "Bayern" : 9,
+    "Saarland" : 10,
+    "Berlin" : 11,
+    "Brandenburg" : 12,
+    "MecklenburgVorpommern" : 13,
+    "Sachsen" : 14,
+    "SachsenAnhalt" : 15,
+    "Thüringen" : 16
+}
+
 
 def filter_state(state_name_nochars, df):
     tic = time.perf_counter()
@@ -74,7 +111,7 @@ def filter_state(state_name_nochars, df):
     return df_filtered
 
 # get nrw values
-df_2019_nrw = filter_state(State.NordrheinWestfalen, df_2019)
+df_2019_nrw = filter_state(statedict["NordrheinWestfalen"], df_2019)
 
 
 #filter for dortmund, AGS = 05 9 13 000 BL Regbez Kreis Gemeinde
@@ -97,7 +134,17 @@ def filter_bike(df):
     df_filtered.name = df.name + '_bike'
     return df_filtered
 
+# only pedestrian
+def filter_predestrian(df):
+    tic = time.perf_counter()
+    df_filtered = df.loc[df['IstFuss'] == 1]
+    toc = time.perf_counter()
+    print(f'filtering for pedestrians took {toc-tic:0.4f} seconds.')
+    df_filtered.name = df.name + '_pedestrian'
+    return df_filtered
+
 df_2019_nrw_dortmund_bike = filter_bike(df_2019_nrw_dortmund)
+df_2019_nrw_dortmund_pedestrian = filter_predestrian(df_2019_nrw_dortmund)
 
 # find the map center
 def findcenter(df, lat_name, lon_name):
@@ -126,32 +173,60 @@ class YearColor:
     color2018 = 'EE7733'
     color2017 = 'EE3377'
     
-df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)]
+df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
+            ,(df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
+            ]
+
+
+def color_category(df):
+    if (df['UKATEGORIE'] == 1):
+        return 'black'
+    elif (df['UKATEGORIE'] == 2):
+        return 'red'
+    else: return 'orange'
+
+def icon_picture(df):
+    if ((df['IstFuss'] == 1) & (df['IstRad'] == 0)):
+        return 'user'
+    if ((df['IstRad'] == 1) & (df['IstFuss'] == 1)):
+        return 'exchange'
+    if ((df['IstRad'] == 1) & (df['IstFuss'] == 0)):
+        return 'bicycle'
+    else: return 'question'
 
 # add markers
 marker_cluster = MarkerCluster().add_to(map)
-def add_markers(df, df_label, lat_name, lon_name, map, color, iconcolor):
+def add_markers(df, df_label, lat_name, lon_name, map, iconcolor):
     for idx, row in df.iterrows():
         popup = folium.Popup(row[df_label], max_width=450,min_width=100)
         folium.Marker(
                         location = [row[lat_name], row[lon_name]], 
                         popup=popup,
                         clustered_marker=True,
-                        icon=folium.Icon(color = color, icon_color=iconcolor, icon= 'bicycle', prefix='fa')).add_to(marker_cluster)
+                        icon=folium.Icon(color = color_category(row), icon_color=iconcolor, icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
 
 
-for i in range(len(df_list)):
-    tic = time.perf_counter()
-    add_markers(df_list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, 'white', df_list[i][1])
-    toc = time.perf_counter()
-    print(f'adding clustered markers of {df_list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
+
+
+def add_all_markers():
+    for i in range(len(df_list)):
+        tic = time.perf_counter()
+        add_markers(df_list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, df_list[i][1])
+        toc = time.perf_counter()
+        print(f'adding clustered markers of {df_list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
+
+add_all_markers()
 
 #save map as html
-tic = time.perf_counter()
-map.save("bikecrashes.html")
-toc = time.perf_counter()
-print(f'saving the map took {toc-tic:0.4f} seconds.')
+def save_map(name):
+    tic = time.perf_counter()
+    map.save(name+".html")
+    print('saved as ' + str(name))
+    toc = time.perf_counter()
+    print(f'saving the map took {toc-tic:0.4f} seconds.')
 
+save_map("bike&pedestriancrashes")
+#end time
 tic = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
 
