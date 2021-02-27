@@ -214,6 +214,8 @@ def add_all_markers(list):
 
 add_all_markers(df_list)
 
+
+
 #save map as html
 def save_map(name):
     tic = time.perf_counter()
