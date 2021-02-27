@@ -174,7 +174,7 @@ class YearColor:
     color2017 = 'purple'
     
 df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
-            ,(df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
+            #,(df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
             ]
 
 
@@ -182,15 +182,16 @@ def color_category(df):
     if (df['UKATEGORIE'] == 1):
         return 'lightgray'
     elif (df['UKATEGORIE'] == 2):
-        return 'lightred'
-    else: return 'lightgreen'
+        return 'red'
+    elif (df['UKATEGORIE'] == 3): 
+        return 'lightgreen'
 
 def icon_picture(df):
     if ((df['IstFuss'] == 1) & (df['IstRad'] == 0)):
         return 'user'
-    if ((df['IstRad'] == 1) & (df['IstFuss'] == 1)):
+    elif ((df['IstRad'] == 1) & (df['IstFuss'] == 1)):
         return 'exchange'
-    if ((df['IstRad'] == 1) & (df['IstFuss'] == 0)):
+    elif ((df['IstRad'] == 1) & (df['IstFuss'] == 0)):
         return 'bicycle'
     else: return 'question'
 
@@ -199,6 +200,8 @@ marker_cluster = MarkerCluster().add_to(map)
 def add_markers(df, df_label, lat_name, lon_name, map, color):
     for idx, row in df.iterrows():
         popup = folium.Popup(row[df_label], max_width=450,min_width=100)
+        circle_color = color_category(row)
+        print(circle_color)
         folium.Marker(
                         location = [row[lat_name], row[lon_name]], 
                         popup=popup,
@@ -206,9 +209,9 @@ def add_markers(df, df_label, lat_name, lon_name, map, color):
                         icon=folium.Icon(color = color, icon_color= 'white', icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
         folium.Circle(  location = [row[lat_name], row[lon_name]],
                         radius=5,
-                        color= color_category(row),
+                        color= circle_color,
                         fill = True,
-                        fill_color = color_category(row),
+                        fill_color = circle_color,
                         fill_opacity= 0.3,
                         tooltip='Unfallkategorie').add_to(map)
 
@@ -231,7 +234,7 @@ def save_map(name):
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
-save_map("bike&pedestriancrashes")
+save_map("bikecrashes")
 #end time
 tic = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
@@ -246,3 +249,7 @@ if debug == True:
     print(df_2019_nrw_dortmund)
     print(df_2019_nrw_dortmund_bike)
     print(center)
+    print(df_2019_nrw_dortmund_bike['UKATEGORIE'])
+    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
+    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
+    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'] == 2])
