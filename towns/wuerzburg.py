@@ -111,9 +111,9 @@ def filter_state(state_name_nochars, df):
     return df_filtered
 
 # get bayern values
-df_2019_nrw = filter_state(statedict["Bayern"], df_2019)
-df_2018_nrw = filter_state(statedict["Bayern"], df_2018)
-df_2017_nrw = filter_state(statedict["Bayern"], df_2017)
+df_2019_bayern = filter_state(statedict["Bayern"], df_2019)
+df_2018_bayern = filter_state(statedict["Bayern"], df_2018)
+df_2017_bayern = filter_state(statedict["Bayern"], df_2017)
 
 
 #filter for würzburg, AGS = 09 6 63 000 BL Regbez Kreis Gemeinde
@@ -125,9 +125,9 @@ def filter_town_ags(ags, df):
     df_filtered.name = df.name + '_town'
     return df_filtered
 
-df_2019_nrw_wuerzburg = filter_town_ags('9663000', df_2019_nrw)
-df_2018_nrw_wuerzburg = filter_town_ags('9663000', df_2018_nrw)
-df_2017_nrw_wuerzburg = filter_town_ags('9663000', df_2017_nrw)
+df_2019_bayern_wuerzburg = filter_town_ags('9663000', df_2019_bayern)
+df_2018_bayern_wuerzburg = filter_town_ags('9663000', df_2018_bayern)
+df_2017_bayern_wuerzburg = filter_town_ags('9663000', df_2017_bayern)
 
 # only bikes
 def filter_bike(df):
@@ -147,9 +147,9 @@ def filter_predestrian(df):
     df_filtered.name = df.name + '_pedestrian'
     return df_filtered
 
-df_2019_nrw_wuerzburg_bike = filter_bike(df_2019_nrw_wuerzburg)
-df_2018_nrw_wuerzburg_bike = filter_bike(df_2018_nrw_wuerzburg)
-df_2017_nrw_wuerzburg_bike = filter_bike(df_2017_nrw_wuerzburg)
+df_2019_bayern_wuerzburg_bike = filter_bike(df_2019_bayern_wuerzburg)
+df_2018_bayern_wuerzburg_bike = filter_bike(df_2018_bayern_wuerzburg)
+df_2017_bayern_wuerzburg_bike = filter_bike(df_2017_bayern_wuerzburg)
 
 # find the map center
 def findcenter(df, lat_name, lon_name):
@@ -161,7 +161,7 @@ def findcenter(df, lat_name, lon_name):
     return (lat_center,lon_center)
 
 #one is enough, no big spread
-center = findcenter(df_2019_nrw_wuerzburg_bike, 'YGCSWGS84', 'XGCSWGS84')
+center = findcenter(df_2019_bayern_wuerzburg_bike, 'YGCSWGS84', 'XGCSWGS84')
 print(center)
 
 #load map
@@ -178,9 +178,9 @@ class YearColor:
     color2018 = 'beige'
     color2017 = 'purple'
     
-df_list = [(df_2019_nrw_wuerzburg_bike, YearColor.color2019),
-            (df_2018_nrw_wuerzburg_bike, YearColor.color2018),
-            (df_2017_nrw_wuerzburg_bike, YearColor.color2017)
+df_list = [(df_2019_bayern_wuerzburg_bike, YearColor.color2019),
+            (df_2018_bayern_wuerzburg_bike, YearColor.color2018),
+            (df_2017_bayern_wuerzburg_bike, YearColor.color2017)
             ]
 
 
@@ -250,9 +250,16 @@ print(f'everything took {toc-start_time:0.4f} seconds.')
 #debugging prints:
 debug = False
 if debug == True:
-    print((df_2019_nrw['UREGBEZ']))
-    print((df_2019_nrw['UKREIS']))
+    print((df_2019_bayern['UREGBEZ']))
+    print((df_2019_bayern['UKREIS']))
     print(df_2019)
-    print(df_2019_nrw_wuerzburg)
-    print(df_2019_nrw_wuerzburg_bike)
+    print(df_2019_bayern_wuerzburg)
+    print(df_2019_bayern_wuerzburg_bike)
     print(center)
+
+casualties = True
+if casualties == True:
+    #bike casualties
+    print('cyclists/pedestrians died: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 1].shape[0]))
+    print('cyclists/pedestrians heavily injured: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 2].shape[0]))
+    print('cyclists/pedestrians lightly injured: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 3].shape[0]))
