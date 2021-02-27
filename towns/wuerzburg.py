@@ -168,15 +168,15 @@ print(center)
 tic = time.perf_counter()
 map = folium.Map(location = center, 
                 tiles='openstreetmap',
-                zoom_start = 11)
+                zoom_start = 12)
 toc = time.perf_counter()
 print(f'creating the map took {toc-tic:0.4f} seconds.')
 
 # add all dfs to a list of dfs, tuple for color
 class YearColor:
-    color2019 = '009988'
-    color2018 = 'EE7733'
-    color2017 = 'EE3377'
+    color2019 = 'darkred'
+    color2018 = 'beige'
+    color2017 = 'purple'
     
 df_list = [(df_2019_nrw_wuerzburg_bike, YearColor.color2019),
             (df_2018_nrw_wuerzburg_bike, YearColor.color2018),
@@ -186,10 +186,10 @@ df_list = [(df_2019_nrw_wuerzburg_bike, YearColor.color2019),
 
 def color_category(df):
     if (df['UKATEGORIE'] == 1):
-        return 'black'
+        return 'lightgray'
     elif (df['UKATEGORIE'] == 2):
-        return 'red'
-    else: return 'orange'
+        return 'lightred'
+    else: return 'lightgreen'
 
 def icon_picture(df):
     if ((df['IstFuss'] == 1) & (df['IstRad'] == 0)):
@@ -202,18 +202,26 @@ def icon_picture(df):
 
 # add markers
 marker_cluster = MarkerCluster().add_to(map)
-def add_markers(df, df_label, lat_name, lon_name, map, iconcolor):
+def add_markers(df, df_label, lat_name, lon_name, map, color):
     for idx, row in df.iterrows():
         popup = folium.Popup(row[df_label], max_width=450,min_width=100)
         folium.Marker(
                         location = [row[lat_name], row[lon_name]], 
                         popup=popup,
                         clustered_marker=True,
-                        icon=folium.Icon(color = color_category(row), icon_color=iconcolor, icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
+                        icon=folium.Icon(color = color, icon_color= 'white', icon = icon_picture(row), prefix='fa')).add_to(marker_cluster)
+        folium.Circle(  location = [row[lat_name], row[lon_name]],
+                        radius=5,
+                        color= color_category(row),
+                        fill = True,
+                        fill_color = color_category(row),
+                        fill_opacity= 0.3,
+                        tooltip='Unfallkategorie').add_to(map)
 
 def add_all_markers(list):
     for i in range(len(list)):
         tic = time.perf_counter()
+        print(list[i][1])
         add_markers(list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, list[i][1])
         toc = time.perf_counter()
         print(f'adding clustered markers of {list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
