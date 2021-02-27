@@ -173,8 +173,8 @@ class YearColor:
     color2018 = 'beige'
     color2017 = 'purple'
     
-df_list = [#(df_2019_nrw_dortmund_bike, YearColor.color2019)
-            #,
+df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
+            ,
             (df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
             ]
 
@@ -234,7 +234,7 @@ def save_map(name):
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
-save_map("pedestriancrashes")
+save_map("bike&pedestriancrashes")
 #end time
 tic = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
@@ -255,15 +255,27 @@ if debug == True:
 
 casualties = True
 if casualties == True:
-    dead = []
-    dead.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
-    h_injured = []
-    h_injured.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
-    l_injured = []
-    l_injured.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
+    dead_cyclists = []
+    dead_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    h_injured_cyclists = []
+    h_injured_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    l_injured_cyclists = []
+    l_injured_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
 
-    #bike casualties print
-    for i in range(len(dead)):
-        print('cyclists/pedestrians died in ' + dead[i][1] + ': '+ dead[i][0])
-        print('cyclists/pedestrians heavily injured in ' + h_injured[i][1] + ': '+ h_injured[i][0])
-        print('cyclists/pedestrians lightly injured in ' + l_injured[i][1] + ': '+ l_injured[i][0])
+    dead_pedestrian = []
+    dead_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    h_injured_pedestrian = []
+    h_injured_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    l_injured_pedestrian = []
+    l_injured_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
+
+
+    #bike/pedestrian casualties print
+    for i in range(len(dead_cyclists)):
+        print('cyclists/pedestrians died in ' + dead_cyclists[i][1] + ': '+ dead_cyclists[i][0])
+        print('cyclists/pedestrians heavily injured in ' + h_injured_cyclists[i][1] + ': '+ h_injured_cyclists[i][0])
+        print('cyclists/pedestrians lightly injured in ' + l_injured_cyclists[i][1] + ': '+ l_injured_cyclists[i][0])
+    for i in range(len(dead_pedestrian)):
+        print('pedestrians died in ' + dead_pedestrian[i][1] + ': '+ dead_pedestrian[i][0])
+        print('pedestrians heavily injured in ' + h_injured_pedestrian[i][1] + ': '+ h_injured_pedestrian[i][0])
+        print('pedestrians lightly injured in ' + l_injured_pedestrian[i][1] + ': '+ l_injured_pedestrian[i][0])
