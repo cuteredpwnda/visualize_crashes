@@ -259,7 +259,21 @@ if debug == True:
 
 casualties = True
 if casualties == True:
-    #bike casualties
-    print('cyclists/pedestrians died: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 1].shape[0]))
-    print('cyclists/pedestrians heavily injured: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 2].shape[0]))
-    print('cyclists/pedestrians lightly injured: ' + str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 3].shape[0]))
+    dead = []
+    dead.append((str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    dead.append((str(df_2018_bayern_wuerzburg_bike.loc[df_2018_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2018'))
+    dead.append((str(df_2017_bayern_wuerzburg_bike.loc[df_2017_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2017'))
+    h_injured = []
+    h_injured.append((str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    h_injured.append((str(df_2018_bayern_wuerzburg_bike.loc[df_2018_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2018'))
+    h_injured.append((str(df_2017_bayern_wuerzburg_bike.loc[df_2017_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2017'))
+    l_injured = []
+    l_injured.append((str(df_2019_bayern_wuerzburg_bike.loc[df_2019_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
+    l_injured.append((str(df_2018_bayern_wuerzburg_bike.loc[df_2018_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2018'))
+    l_injured.append((str(df_2017_bayern_wuerzburg_bike.loc[df_2017_bayern_wuerzburg_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2017'))
+
+    #bike casualties print
+    for i in range(len(dead)):
+        print('cyclists/pedestrians died in ' + dead[i][1] + ': '+ dead[i][0])
+        print('cyclists/pedestrians heavily injured in ' + h_injured[i][1] + ': '+ h_injured[i][0])
+        print('cyclists/pedestrians lightly injured in ' + l_injured[i][1] + ': '+ l_injured[i][0])

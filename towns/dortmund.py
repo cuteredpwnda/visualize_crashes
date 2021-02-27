@@ -255,12 +255,15 @@ if debug == True:
 
 casualties = True
 if casualties == True:
-    #bike casualties
-    print('cyclists/pedestrians died: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]))
-    print('cyclists/pedestrians heavily injured: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]))
-    print('cyclists/pedestrians lightly injured: ' + str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]))
+    dead = []
+    dead.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    h_injured = []
+    h_injured.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    l_injured = []
+    l_injured.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
 
-    #pedestrian casualties
-    print('pedestrians died: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 1].shape[0]))
-    print('pedestrians heavily injured: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 2].shape[0]))
-    print('pedestrians lightly injured: ' + str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 3].shape[0]))
+    #bike casualties print
+    for i in range(len(dead)):
+        print('cyclists/pedestrians died in ' + dead[i][1] + ': '+ dead[i][0])
+        print('cyclists/pedestrians heavily injured in ' + h_injured[i][1] + ': '+ h_injured[i][0])
+        print('cyclists/pedestrians lightly injured in ' + l_injured[i][1] + ': '+ l_injured[i][0])
