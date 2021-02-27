@@ -110,11 +110,13 @@ def filter_state(state_name_nochars, df):
     df_filtered.name = df.name + '_state'
     return df_filtered
 
-# get nrw values
-df_2019_nrw = filter_state(statedict["NordrheinWestfalen"], df_2019)
+# get bayern values
+df_2019_nrw = filter_state(statedict["Bayern"], df_2019)
+df_2018_nrw = filter_state(statedict["Bayern"], df_2018)
+df_2017_nrw = filter_state(statedict["Bayern"], df_2017)
 
 
-#filter for dortmund, AGS = 05 9 13 000 BL Regbez Kreis Gemeinde
+#filter for würzburg, AGS = 09 6 63 000 BL Regbez Kreis Gemeinde
 def filter_town_ags(ags, df):
     tic = time.perf_counter()
     df_filtered = df.loc[(df['UREGBEZ'] == int(ags[1])) & (df['UKREIS'] == int(ags[2:4]))]
@@ -123,7 +125,9 @@ def filter_town_ags(ags, df):
     df_filtered.name = df.name + '_town'
     return df_filtered
 
-df_2019_nrw_dortmund = filter_town_ags('5913000', df_2019_nrw)
+df_2019_nrw_wuerzburg = filter_town_ags('9663000', df_2019_nrw)
+df_2018_nrw_wuerzburg = filter_town_ags('9663000', df_2018_nrw)
+df_2017_nrw_wuerzburg = filter_town_ags('9663000', df_2017_nrw)
 
 # only bikes
 def filter_bike(df):
@@ -143,8 +147,9 @@ def filter_predestrian(df):
     df_filtered.name = df.name + '_pedestrian'
     return df_filtered
 
-df_2019_nrw_dortmund_bike = filter_bike(df_2019_nrw_dortmund)
-df_2019_nrw_dortmund_pedestrian = filter_predestrian(df_2019_nrw_dortmund)
+df_2019_nrw_wuerzburg_bike = filter_bike(df_2019_nrw_wuerzburg)
+df_2018_nrw_wuerzburg_bike = filter_bike(df_2018_nrw_wuerzburg)
+df_2017_nrw_wuerzburg_bike = filter_bike(df_2017_nrw_wuerzburg)
 
 # find the map center
 def findcenter(df, lat_name, lon_name):
@@ -156,7 +161,7 @@ def findcenter(df, lat_name, lon_name):
     return (lat_center,lon_center)
 
 #one is enough, no big spread
-center = findcenter(df_2019_nrw_dortmund_bike, 'YGCSWGS84', 'XGCSWGS84')
+center = findcenter(df_2019_nrw_wuerzburg_bike, 'YGCSWGS84', 'XGCSWGS84')
 print(center)
 
 #load map
@@ -173,8 +178,9 @@ class YearColor:
     color2018 = 'EE7733'
     color2017 = 'EE3377'
     
-df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
-            ,(df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
+df_list = [(df_2019_nrw_wuerzburg_bike, YearColor.color2019),
+            (df_2018_nrw_wuerzburg_bike, YearColor.color2018),
+            (df_2017_nrw_wuerzburg_bike, YearColor.color2017)
             ]
 
 
@@ -219,7 +225,7 @@ add_all_markers(df_list)
 #save map as html
 def save_map(name):
     tic = time.perf_counter()
-    map.save(name+".html")
+    map.save("html/towns/wuerzburg/" + name+".html")
     print('saved as ' + str(name) +".html")
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
@@ -236,6 +242,6 @@ if debug == True:
     print((df_2019_nrw['UREGBEZ']))
     print((df_2019_nrw['UKREIS']))
     print(df_2019)
-    print(df_2019_nrw_dortmund)
-    print(df_2019_nrw_dortmund_bike)
+    print(df_2019_nrw_wuerzburg)
+    print(df_2019_nrw_wuerzburg_bike)
     print(center)
