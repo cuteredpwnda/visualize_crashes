@@ -36,6 +36,16 @@ replace_commas(df_2019)
 replace_commas(df_2018)
 replace_commas(df_2017)
 
+# create a readable column for info
+def create_infocolumn(df):
+    df['Info'] = 'Stunde: ' +  df['USTUNDE'].astype(str)+ ' Uhr' + '\n' +' Monat: ' +  df['UMONAT'].astype(str)  + '\n' +' Jahr: ' + df['UJAHR'].astype(str)
+
+create_infocolumn(df_2019)
+create_infocolumn(df_2018)
+create_infocolumn(df_2017)
+
+# print(df_2019['Info'])
+
 #filter for state
 class State():
     SchleswigHolstein = 1
@@ -59,7 +69,7 @@ def filter_state(state_name_nochars, df):
     tic = time.perf_counter()
     df_filtered = df.loc[df['ULAND'] == int(state_name_nochars)]
     toc = time.perf_counter()
-    print(f'filtering for {State(state_name_nochars)} took {toc-tic:0.4f} seconds.')
+    print(f'filtering for {state_name_nochars} took {toc-tic:0.4f} seconds.')
     df_filtered.name = df.name + '_state'
     return df_filtered
 
@@ -132,7 +142,7 @@ def add_markers(df, df_label, lat_name, lon_name, map, color, iconcolor):
 
 for i in range(len(df_list)):
     tic = time.perf_counter()
-    add_markers(df_list[i][0], 'UART', 'YGCSWGS84', 'XGCSWGS84', map, 'white', df_list[i][1])
+    add_markers(df_list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, 'white', df_list[i][1])
     toc = time.perf_counter()
     print(f'adding clustered markers of {df_list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
 
