@@ -231,13 +231,13 @@ add_all_markers(df_list)
 def save_map(name):
     tic = time.perf_counter()
     map.save("../html/dortmund/" + name+".html")
-    print('saved as ' + str(name) +".html")
+    print('saving as ' + str(name) +".html")
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
 save_map("bike&pedestriancrashes")
 #end time
-tic = time.perf_counter()
+toc = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
 
 
