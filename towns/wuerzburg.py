@@ -224,7 +224,6 @@ def add_markers(df, df_label, lat_name, lon_name, map, color):
 def add_all_markers(list):
     for i in range(len(list)):
         tic = time.perf_counter()
-        print(list[i][1])
         add_markers(list[i][0], 'Info', 'YGCSWGS84', 'XGCSWGS84', map, list[i][1])
         toc = time.perf_counter()
         print(f'adding clustered markers of {list[i][0].name} to the map took {toc-tic:0.4f} seconds.')
