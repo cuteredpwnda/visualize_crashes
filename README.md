@@ -2,12 +2,12 @@
 
 ## Data visualisation of crashes in Dortmund (2019)
 ### Bike and pedestrian crashes
-[here](html\dortmund\bike&pedestriancrashes.html)
+[here](html/dortmund/bike&pedestriancrashes.html)
 ### Only bike crashes
-[here](html\dortmund\bikecrashes.html)
+[here](html/dortmund/bikecrashes.html)
 ### Only pedestrian crashes
-[here](html\dortmund\pedestriancrashes.html)
+[here](html/dortmund/pedestriancrashes.html)
 
 ## Data visualisation of crashes in Würzburg (2017-2019)
 ### Only bike crashes
-[here](html\wuerzburg\bikecrashes.html)
+[here](html/wuerzburg/bikecrashes.html)
