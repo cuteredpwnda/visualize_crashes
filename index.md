@@ -14,3 +14,6 @@
 
 ## Data visualization of crashes in Berlin (2018-2019)
 [here](/html/berlin/bikecrashes.html)
+
+## Data visualization of crashes in Potsdam (2017-2019)
+[here](/html/potsdam/bikecrashes.html)
