@@ -21,6 +21,7 @@ def read_input(location):
     df.name = filename
     return df
 
+df_2020 = read_input('../data/Unfallorte2020_EPSG25832_CSV/csv/Unfallorte2020_LinRef.csv')
 df_2019 = read_input('../data/Unfallorte2019_EPSG25832_CSV/csv/Unfallorte2019_LinRef.txt')
 df_2018 = read_input('../data/Unfallorte2018_EPSG25832_CSV/csv/Unfallorte2018_LinRef.txt')
 df_2017 = read_input('../data/Unfallorte2017_EPSG25832_CSV/csv/Unfallorte2017_LinRef.txt')
@@ -33,6 +34,7 @@ def replace_commas(df):
     toc = time.perf_counter()
     print(f'replacing all commas in {df.name} with dots took {toc-tic:0.4f} seconds.')
 
+replace_commas(df_2020)
 replace_commas(df_2019)
 replace_commas(df_2018)
 replace_commas(df_2017)
@@ -74,7 +76,7 @@ def create_infocolumn(df):
     toc = time.perf_counter()
     print(f'creating the infocolumn for {df.name} took {toc-tic:0.4f} seconds.')
 
-
+create_infocolumn(df_2020)
 create_infocolumn(df_2019)
 create_infocolumn(df_2018)
 create_infocolumn(df_2017)
@@ -111,7 +113,7 @@ def filter_state(state_name_nochars, df):
     return df_filtered
 
 # get nrw values
-df_2019_nrw = filter_state(statedict["NordrheinWestfalen"], df_2019)
+df_2020_nrw = filter_state(statedict["NordrheinWestfalen"], df_2020)
 
 
 #filter for dortmund, AGS = 05 9 13 000 BL Regbez Kreis Gemeinde
@@ -123,7 +125,7 @@ def filter_town_ags(ags, df):
     df_filtered.name = df.name + '_town'
     return df_filtered
 
-df_2019_nrw_dortmund = filter_town_ags('5913000', df_2019_nrw)
+df_2020_nrw_dortmund = filter_town_ags('5913000', df_2020_nrw)
 
 # only bikes
 def filter_bike(df):
@@ -135,7 +137,7 @@ def filter_bike(df):
     return df_filtered
 
 # only pedestrian
-def filter_predestrian(df):
+def filter_pedestrian(df):
     tic = time.perf_counter()
     df_filtered = df.loc[df['IstFuss'] == 1]
     toc = time.perf_counter()
@@ -143,8 +145,8 @@ def filter_predestrian(df):
     df_filtered.name = df.name + '_pedestrian'
     return df_filtered
 
-df_2019_nrw_dortmund_bike = filter_bike(df_2019_nrw_dortmund)
-df_2019_nrw_dortmund_pedestrian = filter_predestrian(df_2019_nrw_dortmund)
+df_2020_nrw_dortmund_bike = filter_bike(df_2020_nrw_dortmund)
+#df_2020_nrw_dortmund_pedestrian = filter_pedestrian(df_2020_nrw_dortmund)
 
 # find the map center
 def findcenter(df, lat_name, lon_name):
@@ -156,7 +158,7 @@ def findcenter(df, lat_name, lon_name):
     return (lat_center,lon_center)
 
 #one is enough, no big spread
-center = findcenter(df_2019_nrw_dortmund_bike, 'YGCSWGS84', 'XGCSWGS84')
+center = findcenter(df_2020_nrw_dortmund_bike, 'YGCSWGS84', 'XGCSWGS84')
 print(center)
 
 #load map
@@ -173,9 +175,9 @@ class YearColor:
     color2018 = 'beige'
     color2017 = 'purple'
     
-df_list = [(df_2019_nrw_dortmund_bike, YearColor.color2019)
-            ,
-            (df_2019_nrw_dortmund_pedestrian, YearColor.color2019)
+df_list = [(df_2020_nrw_dortmund_bike, YearColor.color2019)
+            #,
+            #(df_2020_nrw_dortmund_pedestrian, YearColor.color2019)
             ]
 
 
@@ -244,42 +246,44 @@ print(f'everything took {toc-start_time:0.4f} seconds.')
 #debugging prints:
 debug = False
 if debug == True:
-    print((df_2019_nrw['UREGBEZ']))
-    print((df_2019_nrw['UKREIS']))
-    print(df_2019)
-    print(df_2019_nrw_dortmund)
-    print(df_2019_nrw_dortmund_bike)
+    print((df_2020_nrw['UREGBEZ']))
+    print((df_2020_nrw['UKREIS']))
+    print(df_2020)
+    print(df_2020_nrw_dortmund)
+    print(df_2020_nrw_dortmund_bike)
     print(center)
-    print(df_2019_nrw_dortmund_bike['UKATEGORIE'])
-    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
-    print(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
+    print(df_2020_nrw_dortmund_bike['UKATEGORIE'])
+    print(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
+    print(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
     
 
 casualties = True
 if casualties == True:
     dead_cyclists = []
-    dead_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    dead_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2020'))
     h_injured_cyclists = []
-    h_injured_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    h_injured_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2020'))
     l_injured_cyclists = []
-    l_injured_cyclists.append((str(df_2019_nrw_dortmund_bike.loc[df_2019_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
+    l_injured_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2020'))
 
+    '''
     dead_pedestrian = []
-    dead_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 1].shape[0]), '2019'))
+    dead_pedestrian.append((str(df_2020_nrw_dortmund_pedestrian.loc[df_2020_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 1].shape[0]), '2020'))
     h_injured_pedestrian = []
-    h_injured_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 2].shape[0]), '2019'))
+    h_injured_pedestrian.append((str(df_2020_nrw_dortmund_pedestrian.loc[df_2020_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 2].shape[0]), '2020'))
     l_injured_pedestrian = []
-    l_injured_pedestrian.append((str(df_2019_nrw_dortmund_pedestrian.loc[df_2019_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 3].shape[0]), '2019'))
-
+    l_injured_pedestrian.append((str(df_2020_nrw_dortmund_pedestrian.loc[df_2020_nrw_dortmund_pedestrian['UKATEGORIE'].astype(int) == 3].shape[0]), '2020'))
+    '''
 
     #bike/pedestrian casualties print
     for i in range(len(dead_cyclists)):
         print('cyclists/pedestrians died in ' + dead_cyclists[i][1] + ': '+ dead_cyclists[i][0])
         print('cyclists/pedestrians heavily injured in ' + h_injured_cyclists[i][1] + ': '+ h_injured_cyclists[i][0])
         print('cyclists/pedestrians lightly injured in ' + l_injured_cyclists[i][1] + ': '+ l_injured_cyclists[i][0])
+    '''
     for i in range(len(dead_pedestrian)):
         print('pedestrians died in ' + dead_pedestrian[i][1] + ': '+ dead_pedestrian[i][0])
         print('pedestrians heavily injured in ' + h_injured_pedestrian[i][1] + ': '+ h_injured_pedestrian[i][0])
         print('pedestrians lightly injured in ' + l_injured_pedestrian[i][1] + ': '+ l_injured_pedestrian[i][0])
-        
-    print( 'cyclist vs pedestrian crashes: ' + str(df_2019_nrw_dortmund_bike.loc[(df_2019_nrw_dortmund_bike['IstFuss'] == 1)].shape[0]))
+    print( 'cyclist vs pedestrian crashes: ' + str(df_2020_nrw_dortmund_bike.loc[(df_2020_nrw_dortmund_bike['IstFuss'] == 1)].shape[0]))
+    '''
