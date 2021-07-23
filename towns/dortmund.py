@@ -237,7 +237,7 @@ def save_map(name):
     toc = time.perf_counter()
     print(f'saving the map took {toc-tic:0.4f} seconds.')
 
-save_map("bike&pedestriancrashes")
+save_map("bikecrashes")
 #end time
 toc = time.perf_counter()
 print(f'everything took {toc-start_time:0.4f} seconds.')
