@@ -21,6 +21,7 @@ def read_input(location):
     df.name = filename
     return df
 
+df_2021 = read_input('../data/Unfallorte2021_EPSG25832_CSV/csv/Unfallorte2020_LinRef.csv')
 df_2020 = read_input('../data/Unfallorte2020_EPSG25832_CSV/csv/Unfallorte2020_LinRef.csv')
 df_2019 = read_input('../data/Unfallorte2019_EPSG25832_CSV/csv/Unfallorte2019_LinRef.txt')
 df_2018 = read_input('../data/Unfallorte2018_EPSG25832_CSV/csv/Unfallorte2018_LinRef.txt')
@@ -34,6 +35,7 @@ def replace_commas(df):
     toc = time.perf_counter()
     print(f'replacing all commas in {df.name} with dots took {toc-tic:0.4f} seconds.')
 
+replace_commas(df_2021)
 replace_commas(df_2020)
 replace_commas(df_2019)
 replace_commas(df_2018)
@@ -76,6 +78,7 @@ def create_infocolumn(df):
     toc = time.perf_counter()
     print(f'creating the infocolumn for {df.name} took {toc-tic:0.4f} seconds.')
 
+create_infocolumn(df_2021)
 create_infocolumn(df_2020)
 create_infocolumn(df_2019)
 create_infocolumn(df_2018)
