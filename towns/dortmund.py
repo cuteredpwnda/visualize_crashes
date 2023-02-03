@@ -1,12 +1,9 @@
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import utm
 import re
-import folium
-from folium.plugins import MarkerCluster
 import time
+
+import folium
+import pandas as pd
+from folium.plugins import MarkerCluster
 
 #start timer
 start_time = time.perf_counter()
@@ -21,7 +18,7 @@ def read_input(location):
     df.name = filename
     return df
 
-df_2021 = read_input('../data/Unfallorte2021_EPSG25832_CSV/csv/Unfallorte2020_LinRef.csv')
+df_2021 = read_input('../data/Unfallorte2021_EPSG25832_CSV/Unfallorte2021_LinRef.csv')
 df_2020 = read_input('../data/Unfallorte2020_EPSG25832_CSV/csv/Unfallorte2020_LinRef.csv')
 df_2019 = read_input('../data/Unfallorte2019_EPSG25832_CSV/csv/Unfallorte2019_LinRef.txt')
 df_2018 = read_input('../data/Unfallorte2018_EPSG25832_CSV/csv/Unfallorte2018_LinRef.txt')
