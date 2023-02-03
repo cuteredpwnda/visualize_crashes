@@ -113,7 +113,8 @@ def filter_state(state_name_nochars, df):
     return df_filtered
 
 # get nrw values
-df_2020_nrw = filter_state(statedict["NordrheinWestfalen"], df_2020)
+df_2021_nrw = filter_state(statedict["NordrheinWestfalen"], df_2021)
+#df_2020_nrw = filter_state(statedict["NordrheinWestfalen"], df_2020)
 
 
 #filter for dortmund, AGS = 05 9 13 000 BL Regbez Kreis Gemeinde
@@ -125,7 +126,8 @@ def filter_town_ags(ags, df):
     df_filtered.name = df.name + '_town'
     return df_filtered
 
-df_2020_nrw_dortmund = filter_town_ags('5913000', df_2020_nrw)
+df_2021_nrw_dortmund = filter_town_ags('5913000', df_2021_nrw)
+#df_2020_nrw_dortmund = filter_town_ags('5913000', df_2020_nrw)
 
 # only bikes
 def filter_bike(df):
@@ -145,7 +147,8 @@ def filter_pedestrian(df):
     df_filtered.name = df.name + '_pedestrian'
     return df_filtered
 
-df_2020_nrw_dortmund_bike = filter_bike(df_2020_nrw_dortmund)
+df_2021_nrw_dortmund_bike = filter_bike(df_2021_nrw_dortmund)
+#df_2020_nrw_dortmund_bike = filter_bike(df_2020_nrw_dortmund)
 #df_2020_nrw_dortmund_pedestrian = filter_pedestrian(df_2020_nrw_dortmund)
 
 # find the map center
@@ -158,7 +161,7 @@ def findcenter(df, lat_name, lon_name):
     return (lat_center,lon_center)
 
 #one is enough, no big spread
-center = findcenter(df_2020_nrw_dortmund_bike, 'YGCSWGS84', 'XGCSWGS84')
+center = findcenter(df_2021_nrw_dortmund_bike, 'YGCSWGS84', 'XGCSWGS84')
 print(center)
 
 #load map
@@ -175,7 +178,7 @@ class YearColor:
     color2018 = 'beige'
     color2017 = 'purple'
     
-df_list = [(df_2020_nrw_dortmund_bike, YearColor.color2019)
+df_list = [(df_2021_nrw_dortmund_bike, YearColor.color2019)
             #,
             #(df_2020_nrw_dortmund_pedestrian, YearColor.color2019)
             ]
@@ -250,21 +253,21 @@ if debug == True:
     print((df_2020_nrw['UKREIS']))
     print(df_2020)
     print(df_2020_nrw_dortmund)
-    print(df_2020_nrw_dortmund_bike)
+    print(df_2021_nrw_dortmund_bike)
     print(center)
-    print(df_2020_nrw_dortmund_bike['UKATEGORIE'])
-    print(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
-    print(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
+    print(df_2021_nrw_dortmund_bike['UKATEGORIE'])
+    print(df_2021_nrw_dortmund_bike.loc[df_2021_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2])
+    print(df_2021_nrw_dortmund_bike.loc[df_2021_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3])
     
 
 casualties = True
 if casualties == True:
     dead_cyclists = []
-    dead_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2020'))
+    dead_cyclists.append((str(df_2021_nrw_dortmund_bike.loc[df_2021_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 1].shape[0]), '2020'))
     h_injured_cyclists = []
-    h_injured_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2020'))
+    h_injured_cyclists.append((str(df_2021_nrw_dortmund_bike.loc[df_2021_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 2].shape[0]), '2020'))
     l_injured_cyclists = []
-    l_injured_cyclists.append((str(df_2020_nrw_dortmund_bike.loc[df_2020_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2020'))
+    l_injured_cyclists.append((str(df_2021_nrw_dortmund_bike.loc[df_2021_nrw_dortmund_bike['UKATEGORIE'].astype(int) == 3].shape[0]), '2020'))
 
     '''
     dead_pedestrian = []
